@@ -1,7 +1,8 @@
 Rails.application.routes.draw do
-  get 'static_pages/home'
+  get "users/new"
+  root "static_pages#index"
 
   resources :microposts
   resources :users
-  root "users#index"
+  resources :orders
 end
