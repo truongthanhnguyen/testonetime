@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>test onetime</title>
+  <meta name="viewport" content="width-device-width,initial-scale=1.0, maximum-scale=1.0"/>
+  
+  <style type="text/css">
+  #addressBookWidgetDiv{width: 400px; height: 228px;}
+  #walletWidgetDiv {width: 400px; height: 228px;}</style>
+
+	<script type='text/javascript'>
+    window.onAmazonLoginReady = function() {
+      amazon.Login.setClientId('amzn1.application-oa2-client.6a339767de8e43488a78fd93592e3f27');
+    };
+  </script>
+  <script type='text/javascript' async
+    src='https://static-fe.payments-amazon.com/OffAmazonPayments/jp/lpa/js/Widgets.js'>
+  </script>
+
+  
+</head>
+<body>
+
+
+    <p>first test for onetime amazon payment</p>
+
+  <div id="LoginWithAmazon"> </div>  
+  
+  <script>
+    window.onAmazonLoginReady = function() { 
+      amazon.Login.setClientId('amzn1.application-oa2-client.6a339767de8e43488a78fd93592e3f27'); 
+    };
+    
+    window.onAmazonPaymentsReady = function(){
+      // render the button here
+      var authRequest; 
+      
+      OffAmazonPayments.Button("LoginWithAmazon", "	A3QCQLYZKBHFRS", { 
+        type:  "LwA", 
+        color: "Gold", 
+        size:  "medium", 
+        language: "en-GB",
+
+        authorization: function() { 
+          loginOptions = {scope: "SCOPES", popup: true}; 
+          authRequest = amazon.Login.authorize (loginOptions, "http://localhost:3000"); 
+        }, 
+
+        onError: function(error) { 
+          // your error handling code.
+          // alert("The following error occurred: " 
+          //        + error.getErrorCode() 
+          //        + ' - ' + error.getErrorMessage());
+        } 
+      });
+    }
+  </script>
+ 
+
+  . . .
+   
+  <script type="text/javascript">
+    document.getElementById('Logout').onclick = function() {
+      amazon.Login.logout();
+    };
+  </script>
+
+  <div id="addressBookWidgetDiv">
+</div> 
+
+<script>
+  new OffAmazonPayments.Widgets.AddressBook({
+    sellerId: 'A3QCQLYZKBHFRS',
+    onOrderReferenceCreate: function(orderReference) {
+      // Here is where you can grab the Order Reference ID.
+      orderReference.getAmazonOrderReferenceId();
+    },
+    onAddressSelect: function(orderReference) {
+      // Replace the following code with the action that you want
+      // to perform after the address is selected. The 
+      // amazonOrderReferenceId can be used to retrieve the address 
+      // details by calling the GetOrderReferenceDetails operation. 
+
+      // If rendering the AddressBook and Wallet widgets
+      // on the same page, you do not have to provide any additional
+      // logic to load the Wallet widget after the AddressBook widget.
+
+      // The Wallet widget will re-render itself on all subsequent 
+      // onAddressSelect events without any action from you. 
+      // It is not recommended that you explicitly refresh it.
+    },
+    design: {
+      designMode: 'responsive'
+    },
+    onReady: function(orderReference) {
+      // Enter code here that you want to be executed 
+      // when the address widget has been rendered. 
+    },
+
+    onError: function(error) {
+      // Your error handling code.
+      // During development you can use the following
+      // code to view error messages:
+      // console.log(error.getErrorCode() + ': ' + error.getErrorMessage());
+      // See "Handling Errors" for more information.
+    }
+  }).bind("addressBookWidgetDiv");
+</script>
+
+<!-- Place this code in your HTML where you want the
+     Wallet widget to appear. -->
+<div id="walletWidgetDiv">
+</div>
+
+<script>
+  new OffAmazonPayments.Widgets.Wallet({
+    sellerId: 'A3QCQLYZKBHFRS',
+    onPaymentSelect: function(orderReference) {
+      // Replace this code with the action that you want to perform
+      // after the payment method is chosen.
+
+      // Ideally this would enable the next action for the buyer
+      // including either a "Continue" or "Place Order" button.
+    },
+    design: {
+      designMode: 'responsive'
+    },
+    
+    onError: function(error) {
+      // Your error handling code.
+      // During development you can use the following
+      // code to view error messages:
+      // console.log(error.getErrorCode() + ': ' + error.getErrorMessage());
+      // See "Handling Errors" for more information.
+    }
+  }).bind("walletWidgetDiv");
+</script>
+
+</body>
+</html>
